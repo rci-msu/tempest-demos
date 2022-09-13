@@ -17,19 +17,6 @@ from tensorflow.keras.layers import Flatten
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.callbacks import EarlyStopping
 
-#mirrored_strategy = tf.distribute.MirroredStrategy()
-
-modelNumber = int(sys.argv[1])
-
-## ONLY USE When not in Container
-## Maximum number of threads to use for OpenMP parallel regions.
-#os.environ["OMP_NUM_THREADS"] = str(16)
-## Without setting below 2 environment variables, it didn't work for me. Thanks to @cjw85
-#os.environ["TF_NUM_INTRAOP_THREADS"] = str(8)
-#tf.config.threading.set_intra_op_parallelism_threads(8)
-#os.environ["TF_NUM_INTEROP_THREADS"] = str(16)
-#tf.config.threading.set_inter_op_parallelism_threads(16) 
-#tf.config.set_soft_device_placement(enabled)
 
 # load train and test dataset
 def load_dataset():
@@ -54,6 +41,7 @@ def prep_pixels(train, test):
 	# return normalized images
 	return train_norm, test_norm
 
+
 # evaluate a model using k-fold cross-validation
 def evaluate_model(dataX, dataY, vb, n_folds, eps):
 	bsz = 32
@@ -61,9 +49,18 @@ def evaluate_model(dataX, dataY, vb, n_folds, eps):
 	# set up early stopping
 	es = EarlyStopping(monitor='val_accuracy', mode='min', verbose=1, patience=2)
 	# show model
-	model = define_model(modelNumber)
+        model = Sequential()
+        model.add(Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_uniform', input_shape=(28, 28, 1)))
+        model.add(MaxPooling2D((2, 2)))
+        model.add(Flatten())
+        model.add(Dense(128, activation='relu', kernel_initializer='he_uniform'))
+        model.add(Dense(10, activation='softmax'))
+        # compile model
+        opt = SGD(learning_rate=0.01, momentum=0.9)
+        model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
+        # show summary of model
 	model.summary()
-    # prepare cross validation
+        # prepare cross validation
 	kfold = KFold(n_folds, shuffle=True, random_state=1)
 	# enumerate splits
 	for train_ix, test_ix in kfold.split(dataX):
