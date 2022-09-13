@@ -49,18 +49,18 @@ def evaluate_model(dataX, dataY, vb, n_folds, eps):
 	# set up early stopping
 	es = EarlyStopping(monitor='val_accuracy', mode='min', verbose=1, patience=2)
 	# show model
-        model = Sequential()
-        model.add(Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_uniform', input_shape=(28, 28, 1)))
-        model.add(MaxPooling2D((2, 2)))
-        model.add(Flatten())
-        model.add(Dense(128, activation='relu', kernel_initializer='he_uniform'))
-        model.add(Dense(10, activation='softmax'))
-        # compile model
-        opt = SGD(learning_rate=0.01, momentum=0.9)
-        model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
-        # show summary of model
+	model = Sequential()
+	model.add(Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_uniform', input_shape=(28, 28, 1)))
+	model.add(MaxPooling2D((2, 2)))
+	model.add(Flatten())
+	model.add(Dense(128, activation='relu', kernel_initializer='he_uniform'))
+	model.add(Dense(10, activation='softmax'))
+	# compile model
+	opt = SGD(learning_rate=0.01, momentum=0.9)
+	model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
+	# show summary of model
 	model.summary()
-        # prepare cross validation
+    # prepare cross validation
 	kfold = KFold(n_folds, shuffle=True, random_state=1)
 	# enumerate splits
 	for train_ix, test_ix in kfold.split(dataX):
