@@ -3,7 +3,6 @@ import os
 import sys
 from numpy import mean
 from numpy import std
-from models import define_model
 import tensorflow as tf
 from matplotlib import pyplot as plt
 from sklearn.model_selection import KFold
@@ -64,8 +63,6 @@ def evaluate_model(dataX, dataY, vb, n_folds, eps):
 	kfold = KFold(n_folds, shuffle=True, random_state=1)
 	# enumerate splits
 	for train_ix, test_ix in kfold.split(dataX):
-		# define model
-		model = define_model(modelNumber)
 		# select rows for train and test
 		trainX, trainY, testX, testY = dataX[train_ix], dataY[train_ix], dataX[test_ix], dataY[test_ix]
 		# fit model

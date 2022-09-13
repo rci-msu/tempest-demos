@@ -19,5 +19,3 @@ Calculation of Pi using a Monte Carlo simulation. Written in multiple programmin
 
 ## [MPI 📁](mpi)
 
-Basic MPI examples written in Julia.
-
