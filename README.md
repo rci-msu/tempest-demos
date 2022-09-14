@@ -17,5 +17,4 @@ Machine learning classification in MATLAB using the [MNIST](https://en.wikipedia
 
 Calculation of Pi using a Monte Carlo simulation. Written in multiple programming languages.
 
-## [MPI 📁](mpi)
-
+# [MPI 📁](mpi)
