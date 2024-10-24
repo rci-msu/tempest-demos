@@ -7,8 +7,8 @@
 #SBATCH --mem 2G
 #SBATCH --time 0-01:00:00
 #SBATCH --job-name seq-pi
-#SBATCH --output seq-pi-%j.out
-#SBATCH --error seq-pi-%j.err
+#SBATCH --output %x-%j.out
+#SBATCH --error %x-%j.err
 #SBATCH --mail-type ALL
 start=`date +%s`
 #module load Python/3.10.4-GCCcore-11.3.0

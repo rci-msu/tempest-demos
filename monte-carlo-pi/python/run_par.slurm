@@ -7,8 +7,8 @@
 #SBATCH --mem 2G
 #SBATCH --time 0-01:00:00
 #SBATCH --job-name par-pi
-#SBATCH --output par-pi-%j.out
-#SBATCH --error par-pi-%j.err
+#SBATCH --output %x-%j.out
+#SBATCH --error %x-%j.err
 #SBATCH --mail-type ALL
 start=`date +%s`
 module load Anaconda3/2022.05

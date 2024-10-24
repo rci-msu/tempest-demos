@@ -7,8 +7,8 @@
 #SBATCH --mem-per-cpu 1000
 #SBATCH --time 0-01:00:00
 #SBATCH --job-name mpi-pi
-#SBATCH --output mpi-pi-%j.out
-#SBATCH --error mpi-pi-%j.erryaml
+#SBATCH --output %x-%j.out
+#SBATCH --error %x-%j.err
 #SBATCH --mail-type ALL
 start=`date +%s`
 module load Anaconda3/2022.05
