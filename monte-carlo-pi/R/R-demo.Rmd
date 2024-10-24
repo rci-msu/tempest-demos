@@ -1,0 +1,161 @@
+## R Studio Example on Tempest HPC
+
+
+```{r}
+library(knitr)
+library(tidyverse)
+library(stringr)
+```
+
+```{r}
+
+# define numbers
+names <- c( 'Frontier', 'Tempest', 'XPS 15')
+cores <- c( 606208, 4292, 12)
+gpus <-c( 37888, 22, 1)
+power <- c( 20e6, 20e3, 45)
+flops <- c( 1.194e18, 2.3e15, 5e9)
+cost <- c( 600e6, 1e6, 2e3)
+
+perf <- data.frame(names, cores, gpus, power, flops, cost)
+
+# scale
+scale_df <- function(indx){
+  target <- indx
+  cores <- cores / cores[target]
+  gpus <- gpus / gpus[target]
+  power <- power / power[target]
+  flops <- flops / flops[target]
+  cost <- cost / cost[target]
+  sperf <- data.frame(names, cores, gpus, power, flops, cost)
+  return(sperf)
+}
+
+sperf = scale_df(1)
+# tables
+kable(perf)
+kable(sperf)
+
+#pairs(sperf[,-1])
+
+# pl0ts
+ggplot(perf, aes(x = cores, y = names)) + 
+  geom_col()  + scale_x_continuous(trans='log10') + 
+  xlab('CPU Cores') + ylab('System')
+
+ggplot(perf, aes(x = cost, y = names)) + 
+  geom_col() + xlab('Cost (USD)') + ylab('System')
+
+ggplot(perf, aes(x = flops, y = names)) + 
+  geom_col() + scale_x_continuous(trans='log10') + 
+  xlab('FLOPS') + ylab('System')
+
+```
+
+###
+
+Recall our problem from the Midterm, where I learned about:
+
+- The Ancient Celtic dart-throwing style (`rbeta`)
+- The Ancient Greek dart-throwing style (`rtri`)
+- The Ancient Egyptian dart-throwing style (`rnorm`)
+
+In all of these situations, we had set values for the parameters in our different throwing styles. But if there's anything that I know about ancient civilizations, it's that they are constantly evolving and figuring out new ways to do things. In fact, Pythagoras gave me a phone call just the other day to say that he's been messing around with the parameters for his triangular style. 
+
+Write a function, `AncientDarts`, that accepts the following arguments:
+
+- `n.tries`: numeric, the number of darts to throw
+- `method`: character, one of "greek", "celtic", or "egyptian". Your function should ONLY accept these three methods. If a method is not supplied, the function should default to "greek". If `method == "egyptian"`, darts should be thrown using draws from an `rnorm` distribution. If `method == "greek"`, darts should be thrown using draws from an `rtri` distribution. If `method == "celtic"`, darts should be throw using draws from an `rbeta` distribution. 
+- `rad`: numeric, the radius of the circle for the section of the dartboard that we are trying to hit. By default, this value should be .5
+- `...` additional arguments to be used during simulation. For example, we should be able to specify alternative arguments for generating data from a beta distribution (Celtic method) by passing `shape1 = .5, shape2 = .5`. For the normal distribution (Egpytian method) we should be able to pass `mean = .05, sd = .5` etc. 
+
+
+The function should output a data.frame with the following columns:
+
+- `xs`: numeric, the `x` coordinates of the dart throws
+- `ys`: numeric, the `y` coordinates of the dart throws
+- `on.board`: logical, whether or not a throw made it on board
+- `method`: character, the throwing method used
+- `rad`: numeric, the radius of the circle
+
+```{r}
+library("EnvStats")
+AncientDarts <- function(n_tries, method = "greek", rad = 0.5, ...){
+  # Function to simulate throws at a dartboard with various Distributions
+  # ARGS: 
+  #   number: of tries 
+  #   method: select which distribution to use to generate data
+  # Returns: data frame with [x, y, on_board, method, rad]
+  
+  if(n_tries < 1){
+    stop("You need at least 1 try")
+  }
+  
+  if(method == "celtic"){
+    ## simulate throws
+    xs <- rbeta(n_tries, ...)
+    ys <- rbeta(n_tries, ...)
+    distrubtion <- 'Beta' 
+    
+  }else if(method == "greek"){
+    xs <- rtri(n_tries, ...)
+    ys <- rtri(n_tries, ...)
+    distrubtion <- 'Triangle'
+    
+  }else if(method == "egyptian"){
+    xs <- rnorm(n_tries, ...)
+    z <- rnorm(n_tries, ...)
+    ys <- 0.7 * xs + (sqrt(1 - 0.7^2)) * z
+    distrubtion <-'Normal'
+    
+  }
+  
+  # check if our combination of x and y coordinates are in the circle
+  on_board <- (xs - rad)^2 + (ys - rad)^2 < (rad)^2
+  
+  # make df
+  df <- data.frame(xs,ys,on_board)
+  df <- df %>% mutate(method = method)
+  df <- df %>% mutate(rad = rad)
+  
+  return(df)
+}
+```
+
+
+In this function the ... was super useful and mutate was nice to add columns easily. I already had a good fucntion I resued with some tweaks from the midterm so this one was not too bad. 
+
+
+### One last ride (5 points)
+
+Using your `AncientDarts` function, create scatter-plots and report on board probabilities for the following situations: 
+
+- `egyptian` style, with `num.tries = 1000`, `rad = .1`, `mean = .45`, and `sd = .06`
+- `celtic` style, with `num.tries = 1000`, `rad = .5`, `shape1 = .5`, and `shape2 = .5`. 
+- `greek` style, with `num.tries = 1000`, `rad = .4`, `min = -.01`, `max = 1.01`, and `mode = .5`.
+
+```{r}
+# create data frames from different methods and their parameters
+tries = 1e5
+e_df <- AncientDarts(n_tries = tries, method = "egyptian", rad = 0.3, mean = 0.45, sd = 0.06)
+c_df <- AncientDarts(n_tries = tries, method = "celtic",   rad = 0.5, shape1 = 0.5, shape2 = 0.5)
+g_df <- AncientDarts(n_tries = tries, method = "greek",  rad = 0.5, min = -0.1, max = 1.01, mode = 0.5)
+
+
+# print out hit rates
+sprintf("Egyptian had %0.3f hit rate", mean(e_df$on_board))
+sprintf("Celtic had %0.3f hit rate", mean(c_df$on_board))
+sprintf("Greek had %0.3f hit rate", mean(g_df$on_board))
+
+
+# plot the darts
+c_df %>% ggplot( aes(x = xs, y = ys, col = on_board)) + 
+  geom_point() + ggtitle("Celtic")
+
+e_df %>% ggplot( aes(x = xs, y = ys, col = on_board)) + 
+  geom_point() + ggtitle("Egyptian")
+
+g_df %>% ggplot( aes(x = xs, y = ys, col = on_board)) + 
+  geom_point() + ggtitle("Greek")
+
+```
