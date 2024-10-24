@@ -1,15 +1,10 @@
 # Tempest Demos
 This repository contains demos that showcase various workloads on Tempest
 
-## Python Demos
+## [Monte Carlo Pi 📁](monte-carlo-pi)
 
-## R-Studio Demos
+## [Handwritten digit classification using GPUs 📁](mnist)
 
-## MATLAB Demos
-### [Monte Carlo Pi 📁](monte-carlo-pi)
+## [Image blur 📁](image-blur)
 
-### [Handwritten digit classification using GPUs 📁](mnist)
-
-### [Image blur 📁](image-blur)
-
-### [GPU speedup 📁](gpu-test)
+## [GPU speedup 📁](gpu-test)
