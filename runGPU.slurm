@@ -1,10 +1,5 @@
 #!/bin/bash
 ##
-## gpuexample.sbatch submit a job using a GPU
-##
-## Lines starting with #SBATCH are read by Slurm. Lines starting with ## are comments.
-## All other lines are read by the shell.
-##
 #SBATCH --account=group-rci 		# priority account to use
 #SBATCH --job-name=mnist           # job name
 #SBATCH --partition=gpuunsafe         # queue partition to run the job in
@@ -14,14 +9,10 @@
 #SBATCH --gpus-per-task=1		# number of GPUs to allocate - all GPUs are currently A40 model
 #SBATCH --mem=16G                     # 2000 MB of Memory allocated - do not allocate more than 128000 MB mem per GPU
 #SBATCH --time=0-01:00:00               # Maximum job run time
-#SBATCH --output=mnistGPU_%A_%3a.out 	# standard output file (%j = jobid)
-#SBATCH --error=mnistGPU_%A_%3a.err 	# standard error file
-#SBATCH --array=0-9
-##SBATCH --exclude=tempest-gpu[004-005]
-##SBATCH --mail-user=<email address>	# email address to recieve job updates
-##SBATCH --mail-type=ALL			# conditions to recieve emial notifications for job
+#SBATCH --output=mnistGPU_%j.out 	# standard output file (%j = jobid)
+#SBATCH --error=mnistGPU_%j.err 	# standard error file
 ## Run 'man sbatch' for more information on the options above.
 date
 echo "Hello from $(hostname)."
-time -p singularity exec --nv -B $PWD:/code docker://nvcr.io/nvidia/tensorflow:22.07-tf2-py3 /code/test.sh 
+apptainer exec --nv -B $PWD:/code tfGPU.sif /code/run_in_container.sh 
 echo "Ended batch processing at `date`."
