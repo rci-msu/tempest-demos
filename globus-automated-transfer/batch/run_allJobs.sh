@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Submit data transfer job and give ID to transferJob variable. The cut command is for trimming down stdout to just give the job ID.
 transferJob=$(sbatch run_transferData.sbatch | cut -d ' ' -f 4)
 
