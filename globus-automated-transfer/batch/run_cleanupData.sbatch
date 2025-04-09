@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## Specify the account to use; you must use your priority account.
-#SBATCH --account=priority-joeshaw
+#SBATCH --account=priority-<account-name>
 
 ## Use the priority partition.
 #SBATCH --partition=priority
@@ -25,5 +25,5 @@
 ## Run 'man sbatch' for more information on the options above.
 ## Below, enter commands needed to execute your workload
 
-rm /home/group/joeshaw/matlab-globus-example/important-data/*
+rm ../transfer-folder/*
 

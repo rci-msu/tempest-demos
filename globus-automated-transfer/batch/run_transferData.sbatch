@@ -1,15 +1,15 @@
 #!/bin/bash
 
 ## Specify the account to use; you must use your priority account.
-#SBATCH --account=priority-joeshaw
+#SBATCH --account=priority-<account-name>
 
 ## Use the priority partition.
 #SBATCH --partition=priority
 
 ## Number of CPUs to allocate. Note that in the slurm, CPUs correspond to
 ## logical processors, not physical cores.
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=32G
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=4G
 
 ## Maximum job run time. Format is days-HH:MM:SS.
 #SBATCH --time=0-01:00:00
@@ -29,8 +29,6 @@
 module load Globus-CLI
 globus login
 globus whoami
-
-
 
 # Set environmental variables for $blackmore and $tempest, along with personal endpoint if wanted.
 BLACKMORE=5485832e-723e-4b52-8472-0410e90902ad

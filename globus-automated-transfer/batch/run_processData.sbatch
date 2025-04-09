@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## Specify the account to use; you must use your priority account.
-#SBATCH --account=priority-joeshaw
+#SBATCH --account=priority-<account-name>
 
 ## Use the priority partition.
 #SBATCH --partition=priority
@@ -42,4 +42,4 @@ cd $tmp_scratch/scripts
 matlab -batch "processingScript($SLURM_ARRAY_TASK_ID)"
 
 # Move Results to Group Directory
-cp -r $tmp_scratch/results /home/group/joeshaw/matlab-globus-example/.
+cp -r $tmp_scratch/results /home/group/results/folder/here
