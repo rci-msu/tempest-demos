@@ -6,5 +6,3 @@ This repository contains demos that showcase various workloads on Tempest
 ## [Handwritten digit classification using GPUs 📁](mnist)
 
 ## [Image blur 📁](image-blur)
-
-## [GPU speedup 📁](gpu-test)
