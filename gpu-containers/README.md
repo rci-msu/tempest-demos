@@ -1,20 +1,52 @@
-# Tempest Demos
-This repository contains demos that showcase various workloads on Tempest
+# gpuContainers101 using Apptainer
 
-## [Globus data transfer 📁](globus-automated-transfer)
 
-Automated data transfer from Blackmore to Tempest
+## Get the Container
+Run the below to pull the optimzed GPU conatiner from Nvidia  
 
-## [Image blur 📁](image-blur)
+`apptainer pull tfGpu.sif docker://nvcr.io/nvidia/tensorflow:22.07-tf2-py3`  
 
-A parallel image blurring example in MATLAB
+Here is an explantion of the input parmeters
+ - `pull` retreive a conatiner from the internet
+ - `tfGpu.sif` the file you want to save the conatiner into
+   - You can rename the .sif to be whatever you want just remember to use it in the next step. 
+ - `docker://nvcr.io/nvidia/tensorflow:22.07-tf2-py3` The container we are pulling 
+   - Notice that the `docker://` this tells singularty we want to pull from the docker registry.  
 
-## [Handwritten digit classification using GPUs 📁](mnist)
+## Test the Container
+Before running a full program, Container can be tested by just running a small python script, 
+This script just shows that Tensorflow is imported into the program and uses GPU device.
 
-Machine learning classification in MATLAB using the [MNIST](https://en.wikipedia.org/wiki/MNIST_database) dataset.
+`apptainer exec --nv -B $PWD:/code tfGpu.sif python test-tf-container-with-gpu.py`
 
-## [Monte Carlo Pi 📁](monte-carlo-pi)
+## Run the Container
+Run to execute to mnist code on the GPU  
 
-Calculation of Pi using a Monte Carlo simulation. Written in multiple programming languages.
+`apptainer exec --nv -B $PWD:/code tfGpu.sif /code/run_in_container.sh`  
 
-# [MPI 📁](mpi)
+Here is an explantion of the input parmeters
+ - `exec` execute code using a continer
+ - `--nv` use the nvidia gpu
+ - `-B` make a bind so the container can see files
+ - `$PWD` output the current working directory
+ - `$PWD:/code` this mounts the current directoy to /code in the container
+ - `tfGpu.sif` the container we are using to execute to code
+ - `/code/run_in_container.sh` the file to run in the container
+
+
+## Notes
+Here is the Container Platform we are using
+[Apptainer](https://apptainer.org/docs/user/1.3/)
+
+The MNIST code is largely based on 
+[MNIST](https://machinelearningmastery.com/how-to-develop-a-convolutional-neural-network-from-scratch-for-mnist-handwritten-digit-classification/)
+
+Here is the Nvidia NGC container regisrty for optimazed GPU containers
+[Nvidia NGC](https://catalog.ngc.nvidia.com/)
+
+Here is the offical Tensorflow container
+[TF container](https://hub.docker.com/r/tensorflow/tensorflow)
+
+Here is the RCI's internal guide to use Yolo Container 
+[Yolo Container](https://msudocs.atlassian.net/wiki/x/JoCqTw)
+
