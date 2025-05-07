@@ -5,13 +5,17 @@ This repository contains demos that showcase various workloads on Tempest
 
 Automated data transfer from Blackmore to Tempest
 
-## [Image blur 📁](image-blur)
+## [GPU containers 📁](gpu-containers)
 
-A parallel image blurring example in MATLAB
+Various examples of running GPU-accelerated machine learning models using apptainer containers.
 
 ## [Handwritten digit classification using GPUs 📁](mnist)
 
 Machine learning classification in MATLAB using the [MNIST](https://en.wikipedia.org/wiki/MNIST_database) dataset.
+
+## [Image blur 📁](image-blur)
+
+A parallel image blurring example in MATLAB
 
 ## [Monte Carlo Pi 📁](monte-carlo-pi)
 
