@@ -47,6 +47,4 @@ Here is the Nvidia NGC container regisrty for optimazed GPU containers
 Here is the offical Tensorflow container
 [TF container](https://hub.docker.com/r/tensorflow/tensorflow)
 
-Here is the RCI's internal guide to use Yolo Container 
-[Yolo Container](https://msudocs.atlassian.net/wiki/x/JoCqTw)
 
